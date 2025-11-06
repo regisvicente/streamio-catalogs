@@ -3,7 +3,7 @@
     { "source": "/(.*)", "destination": "/api" }
   ],
   "functions": {
-    "api/**/*.js": {
+    "api/**.js": {
       "runtime": "nodejs20.x"
     }
   }
