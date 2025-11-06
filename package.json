@@ -10,7 +10,6 @@
     "serverless-http": "^3.2.0"
   },
   "scripts": {
-    "dev": "vercel dev",
     "start": "node api/index.js"
   }
 }
