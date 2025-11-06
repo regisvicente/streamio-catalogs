@@ -1,5 +1,4 @@
 const express = require('express');
-const serverless = require('serverless-http');
 const cors = require('cors')
 
 
@@ -147,11 +146,9 @@ app.get('/', (req, res) => {
 });
 
 
-
-// Exporta como serverless function para Vercel
-module.exports = serverless(app);
-
 const port = process.env.PORT || 7700;
 app.listen(port, () => {
     console.log(`http://127.0.0.1:${port}/manifest.json`);
 });
+
+module.exports = app;
