@@ -1,0 +1,16 @@
+{
+  "name": "stremio-addon-vercel",
+  "version": "0.1.0",
+  "private": true,
+  "type": "commonjs",
+  "dependencies": {
+    "axios": "^1.13.2",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "serverless-http": "^3.2.0"
+  },
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "node api/index.js"
+  }
+}
