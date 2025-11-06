@@ -1,4 +1,5 @@
 const express = require('express');
+const serverless = require('serverless-http');
 const cors = require('cors')
 
 
@@ -151,4 +152,4 @@ app.listen(port, () => {
     console.log(`http://127.0.0.1:${port}/manifest.json`);
 });
 
-module.exports = app;
+module.exports = serverless(app);
