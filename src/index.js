@@ -5,6 +5,9 @@ const cors = require('cors')
 const app = express();
 app.set('trust proxy', true)
 app.use(cors());
+app.get('/health', (_req, res) => res.status(200).send('ok'));
+
+
 // -------- Config do Add-on --------
 const ADDON_NAME = 'Meu Add-on (Vercel)';
 const ADDON_ID = 'org.example.vercel.addon';
@@ -146,9 +149,14 @@ app.get('/', (req, res) => {
 });
 
 
-const port = process.env.PORT || 7700;
-app.listen(port, () => {
-    console.log(`http://127.0.0.1:${port}/manifest.json`);
-});
+// Exportar uma função handler evita qualquer incompatibilidade
+module.exports = (req, res) => app(req, res);
 
-module.exports = app;
+// Rodar local
+if (require.main === module) {
+  const port = process.env.PORT || 7000;
+  app.listen(port, () => {
+    console.log(`Local: http://localhost:${port}`);
+    console.log(`Manifest: http://localhost:${port}/manifest.json`);
+  });
+}
