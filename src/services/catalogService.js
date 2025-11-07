@@ -125,8 +125,6 @@ async function fetchFreshCatalog(type, providerId, offset = 0) {
 
         const stremioType = type === 'MOVIE' ? 'movie' : 'series';
 
-        console.log(process.env.TMDB_API_KEY)
-
         try {
           const tmdbKey = process.env.TMDB_API_KEY;
           const tmdbUrl = `https://api.themoviedb.org/3/find/${imdbId}?api_key=${tmdbKey}&language=pt-BR&external_source=imdb_id`;
