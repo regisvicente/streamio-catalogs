@@ -62,9 +62,13 @@ async function fetchFreshCatalog(type, providerId, offset = 0) {
         cinemeta.data?.meta?.description ||
         "Descrição não disponível.";
 
+      const title =
+        themoviedb.data?.movie_results?.[0]?.title ||
+        item.node.content.title
+
       return {
         ...cinemeta.data?.meta,
-        ...{ id: imdbId, name: item.node.content.title, poster: posterUrl, videos: undefined, description },
+        ...{ id: imdbId, name: title, poster: posterUrl, videos: undefined, description },
       }
 
     } catch {
