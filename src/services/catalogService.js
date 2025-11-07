@@ -31,11 +31,7 @@ async function fetchFreshCatalog(type, providerId, offset = 0) {
           "packages": providers,
           "excludeIrrelevantTitles": false,
           "presentationTypes": [],
-          "monetizationTypes": [
-            "FREE",
-            "FLATRATE",
-            "ADS"
-          ]
+          "monetizationTypes": []
         },
         "language": language,
         "country": country

@@ -2,12 +2,12 @@ const { ADDON_ID, ADDON_NAME } = require('../config');
 
 const PROVIDERS = [
   { id: 'nfx', name: 'Netflix' },
-  { id: 'amp', name: 'Prime Video' },
+  { id: 'prv', name: 'Prime Video' },
   { id: 'pmp', name: 'Paramount+' },
   { id: 'atp', name: 'Apple TV+' },
   { id: 'dnp', name: 'Disney+' },
   { id: 'hbm', name: 'HBO Max' },
-  { id: 'cru', name: 'Crunchyroll' },
+
 ];
 
 const catalogs = PROVIDERS.flatMap(provider => ([
