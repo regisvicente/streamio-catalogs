@@ -1,9 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 
+const DEMO_MOVIES = require('../data/demoMovies');
+
 const CACHE_TTL_MS = Number(process.env.CACHE_TTL_MS || 6 * 60 * 60 * 1000); // 6 horas
 //const CACHE_DIR = process.env.CACHE_DIR || '/tmp';
-const CACHE_DIR = './cache';
+const CACHE_DIR = '/tmp';
 const CACHE_FILE = path.join(CACHE_DIR, 'catalog-cache.json');
 
 
@@ -16,7 +18,7 @@ function isValid(ts) {
 }
 
 function ensureDir() {
-  try { fs.mkdirSync(CACHE_DIR, { recursive: true }); } catch {}
+  try { fs.mkdirSync(CACHE_DIR, { recursive: true }); } catch { }
 }
 
 function readDisk() {
@@ -43,6 +45,7 @@ function writeDisk(data) {
 }
 
 function load() {
+  return DEMO_MOVIES[0]
   // 1) RAM
   if (isValid(mem.ts)) {
     return { movies: mem.movies || {}, series: mem.series || {} };
@@ -65,11 +68,11 @@ function save(movies, series) {
 
 async function getOrRefresh(fetchFresh) {
   const cached = load();
+  console.log(cached)
   if (cached) return { data: cached, from: 'cache' };
-  
-  
+
   if (inFlight) {
-    await inFlight; 
+    await inFlight;
     return { data: load(), from: 'race' };
   }
 
