@@ -58,26 +58,31 @@ async function fetchFreshCatalog(type, providerId, offset = 0) {
       posterUrl = `https://live.metahub.space/poster/medium/${imdbId}/img`;
     }
 
-    const themoviedb = await axios.get(`https://api.themoviedb.org/3/find/${imdbId}?api_key=971041164778bac2bf0654cf97478376&language=pt-BR&external_source=imdb_id`);
+    try {
+      const themoviedb = await axios.get(`https://api.themoviedb.org/3/find/${imdbId}?api_key=971041164778bac2bf0654cf97478376&language=pt-BR&external_source=imdb_id`);
+      const cinemeta = await axios.get(`https://v3-cinemeta.strem.io/meta/${type === 'MOVIE' ? 'movie' : 'series'}/${imdbId}.json`);
+      const description =
+        themoviedb.data?.movie_results?.[0]?.overview ||
+        cinemeta.data?.meta?.description ||
+        "Descrição não disponível.";
 
-    // get better metadata from cinemeta
-    const cinemeta = await axios.get(`https://v3-cinemeta.strem.io/meta/${type === 'MOVIE' ? 'movie' : 'series'}/${imdbId}.json`);
+      return {
+        ...cinemeta.data?.meta,
+        ...{ id: imdbId, name: item.node.content.title, poster: posterUrl, videos: undefined, description },
+      }
 
-    const description =
-      themoviedb.data?.movie_results?.[0]?.overview ||
-      cinemeta.data?.meta?.description ||
-      "Descrição não disponível.";
+    } catch {
+      console.log('erro ao pegar descriçao')
+    }
 
-    return cinemeta.data?.meta ? {
-      ...cinemeta.data?.meta,
-      ...{ id: imdbId, name: item.node.content.title, poster: posterUrl, videos: undefined, description },
-    } : {
+    return {
       id: imdbId,
       name: item.node.content.title,
       poster: posterUrl,
       posterShape: 'poster',
       type: type === 'MOVIE' ? 'movie' : 'series',
     }
+
   }))).filter(item => item?.id);
 
 }

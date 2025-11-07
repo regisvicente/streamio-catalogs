@@ -2,10 +2,14 @@ const express = require('express');
 const router = express.Router();
 const { fetchFreshCatalog } = require('../services/catalogService');
 
-router.get('/catalog/:type/:id.json', async (req, res) => {
+router.get('/catalog/:type/:id*.json', async (req, res) => {
   try {
     const { type, id } = req.params;
-    const { skip = 0, search = '' } = req.query;
+    const extraPath = req.params[0] || '';
+    const skipMatch = extraPath.match(/skip=(\d+)/);
+    const skip = skipMatch ? Number(skipMatch[1]) : Number(req.query.skip) || 0;
+
+    const search = req.query.search || '';
 
     const offset = Number(skip) || 0;
 
