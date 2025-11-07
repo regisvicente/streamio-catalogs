@@ -5,9 +5,8 @@ const { BASE_URL } = require('../config');
 
 router.get(['/manifest.json', '/manifest'], (req, res) => {
   const origin = BASE_URL || `${req.protocol}://${req.get('host')}`;
-  const dynManifest = { ...manifestBase, logo: `${origin}/logo.png` };
   res.setHeader('Cache-Control', 'max-age=3600, public');
-  res.json(dynManifest);
+  res.json(manifestBase);
 });
 
 module.exports = router;
