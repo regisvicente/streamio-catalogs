@@ -11,8 +11,18 @@ const PROVIDERS = [
 ];
 
 const catalogs = PROVIDERS.flatMap(provider => ([
-  { id: provider.id, type: 'movie', name: provider.name },
-  { id: provider.id, type: 'series', name: provider.name },
+  {
+    id: provider.id, type: 'movie', name: provider.name, extra: [
+      { name: 'search', isRequired: false },
+      { name: 'skip', isRequired: false }
+    ]
+  },
+  {
+    id: provider.id, type: 'series', name: provider.name, extra: [
+      { name: 'search', isRequired: false },
+      { name: 'skip', isRequired: false }
+    ]
+  },
 ]));
 
 const manifestBase = {

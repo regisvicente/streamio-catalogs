@@ -1,23 +1,21 @@
 const express = require('express');
 const router = express.Router();
-const cache = require('../cache/store');
 const { fetchFreshCatalog } = require('../services/catalogService');
 
 router.get('/catalog/:type/:id.json', async (req, res) => {
   try {
-    const { type, id } = req.params;        
-    const { search = '', skip = 0 } = req.query;
+    const { type, id } = req.params;
+    const { skip = 0, search = '' } = req.query;
+
+    const offset = Number(skip) || 0;
 
     if (!['movie', 'series'].includes(type)) {
       return res.status(400).json({ err: 'Tipo inválido' });
     }
-    
-    const { data } = await cache.getOrRefresh(fetchFreshCatalog);
 
-    const key = type === 'movie' ? 'movies' : 'series';
-    const byProvider = data[key] || {};
+    const typeQuery = type === 'movie' ? 'MOVIE' : 'SHOW';
 
-    let metas = byProvider[id] || [];
+    let metas = await fetchFreshCatalog(typeQuery, id, offset);
 
     // filtro de busca
     if (search) {
@@ -28,15 +26,8 @@ router.get('/catalog/:type/:id.json', async (req, res) => {
       );
     }
 
-    // paginação
-    const start = Number(skip) || 0;
-    const pageSize = 50;
-    metas = metas.slice(start, start + pageSize);
-
     // cache HTTP
     res.setHeader('Cache-Control', 'max-age=300, public');
-
-    // resposta no formato que o Stremio espera
     res.json({ metas });
   } catch (err) {
     console.error('[CATALOG] Erro ao montar catálogo:', err);
