@@ -30,7 +30,7 @@ const manifestBase = {
   logo: 'https://play-lh.googleusercontent.com/TBRwjS_qfJCSj1m7zZB93FnpJM5fSpMA_wUlFDLxWAb45T9RmwBvQd5cWR5viJJOhkI',
   version: "1.0.0",
   name: ADDON_NAME,
-  description: 'Template de add-on Stremio em Node + Express na Vercel.',
+  description: 'Streaming Catalogs - TESTE',
   resources: ['catalog'],
   types: ['movie', 'series'],
   idPrefixes: ['tt'],
