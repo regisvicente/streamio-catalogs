@@ -2,14 +2,12 @@ const axios = require('axios');
 
 const PAGE_SIZE = 20;
 
-async function fetchFreshCatalog(stremioType, providerId, genre, offset = 0) {
+async function fetchFreshCatalog(search, stremioType, providerId, genre, offset = 0) {
   const country = 'BR';
   const language = 'pt';
   const providers = [providerId];
 
   const typeQuery = stremioType === 'movie' ? 'MOVIE' : 'SHOW';
-
-  console.log('regisddf', genre)
 
   try {
     const res = await axios.post('https://apis.justwatch.com/graphql', {

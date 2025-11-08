@@ -27,6 +27,7 @@ const GENRE_CODE_BY_LABEL = {
 router.get(['/catalog/:type/:id.json',
   '/catalog/:type/:id/:query?.json'], async (req, res) => {
     try {
+      res.setHeader('Cache-Control', 'max-age=300, public');
       const { type, id, query } = req.params;
 
       if (!['movie', 'series'].includes(type)) {
@@ -50,28 +51,20 @@ router.get(['/catalog/:type/:id.json',
         }
       }
 
-      const offset = Number(skip) || 0;
+      if (search) {
+        return res.json({ metas: [] });
+      } else {
 
-      const jwGenre = genre && GENRE_CODE_BY_LABEL[genre] ? GENRE_CODE_BY_LABEL[genre] : null;
+        const offset = Number(skip) || 0;
 
-      let metas = await fetchFreshCatalog(type, id, jwGenre, offset);
+        const jwGenre = genre && GENRE_CODE_BY_LABEL[genre] ? GENRE_CODE_BY_LABEL[genre] : null;
 
-      // filtro de busca
-      // const search = null
-      // if (search) {
-      //   const q = String(search).toLowerCase();
-      //   metas = metas.filter(m =>
-      //     (m.name || '').toLowerCase().includes(q) ||
-      //     (m.description || '').toLowerCase().includes(q)
-      //   );
-      // }
-
-      // cache HTTP
-      res.setHeader('Cache-Control', 'max-age=300, public');
-      res.json({ metas });
+        const metas = await fetchFreshCatalog(search, type, id, jwGenre, offset);
+        return res.json({ metas });
+      }
     } catch (err) {
       console.error('[CATALOG] Erro ao montar catálogo:', err);
-      res.status(500).json({ err: 'Erro interno no catálogo' });
+      return res.status(500).json({ err: 'Erro interno no catálogo' });
     }
   });
 
