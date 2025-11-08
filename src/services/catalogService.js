@@ -2,10 +2,14 @@ const axios = require('axios');
 
 const PAGE_SIZE = 20;
 
-async function fetchFreshCatalog(type, providerId, offset = 0) {
+async function fetchFreshCatalog(stremioType, providerId, genre, offset = 0) {
   const country = 'BR';
   const language = 'pt';
   const providers = [providerId];
+
+  const typeQuery = stremioType === 'movie' ? 'MOVIE' : 'SHOW';
+
+  console.log('regisddf', genre)
 
   try {
     const res = await axios.post('https://apis.justwatch.com/graphql', {
@@ -21,9 +25,9 @@ async function fetchFreshCatalog(type, providerId, offset = 0) {
           "ageCertifications": [],
           "excludeGenres": [],
           "excludeProductionCountries": [],
-          "genres": [],
+          "genres": genre ? [genre] : [],
           "objectTypes": [
-            type
+            typeQuery
           ],
           "productionCountries": [],
           "packages": providers,
@@ -60,8 +64,6 @@ async function fetchFreshCatalog(type, providerId, offset = 0) {
         let posterUrl = posterId
           ? `https://images.justwatch.com/poster/${posterId}/s332/img`
           : `https://live.metahub.space/poster/medium/${imdbId}/img`;
-
-        const stremioType = type === 'MOVIE' ? 'movie' : 'series';
 
         try {
           const tmdbKey = process.env.TMDB_API_KEY;
